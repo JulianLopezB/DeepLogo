@@ -1,8 +1,8 @@
-from google.oauth2 import service_account
 from google.cloud import storage
 from pathlib import Path
 import datetime
 import os
+from src.credentials import *
 
 
 def implicit():

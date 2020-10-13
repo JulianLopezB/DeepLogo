@@ -1,5 +1,6 @@
 from src.video_processing import *
 from src.fetch_data import *
+from src.paths import *
 
 # TODO: obtener el titulo de video de la url (libreria youtube)
 
@@ -16,7 +17,6 @@ video_category = 'F1'
 blob_path_video = f'videos_files/{video_category}/{video_title}/video.mp4'
 uri_video = f'gs://{bucket_name}/'+blob_path_video
 
-path_data = Path('./data')
 pathIn = path_data / str(video_title + '/input/')
 pathIn_Video = pathIn / str(video_title + '.mp4')
 pathIn_Frames =  pathIn / 'frames'
@@ -26,10 +26,6 @@ pathOut = path_data / str(video_title + '/output/')
 path_results= pathOut / 'result.json'
 path_annotations = pathOut / 'annotations.csv'
 path_logos_video = pathOut / f'{video_title} - Logos.mp4'
-
-#PARMAS
-credentials = service_account.Credentials.from_service_account_file(path_json)
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(path_json)
 
 
 if __name__ == "__main__":

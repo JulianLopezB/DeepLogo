@@ -21,15 +21,7 @@ from apiclient.http import MediaFileUpload
 
 #from google.cloud import videointelligence_v1p3beta1 as videointelligence
 from google.cloud import videointelligence
-from google.oauth2 import service_account
-
-
-path_data = Path('./data')
-path_json = path_data / 'logo-detection.json'
-
-credentials = service_account.Credentials.from_service_account_file(path_json)
-
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = str(path_json)
+from src.credentials import *
 
 
 def create_paths(pathOut, pathIn_Frames, pathIn_Frames_Resized):
