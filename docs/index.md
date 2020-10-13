@@ -12,7 +12,7 @@ Companies spend millinos of dollars to track brand mentions but they ignore one 
 <center><img src="https://github.com/JulianLopezB/deepstagram.ai/raw/master/static/b61426dc-dc89-4ab7-9496-7264f490c088.jpeg" width="50%"></center>
 
 
-DeepStagram.ai uses computer vision technologies and advanced AI algorithms to detect logos in images and videos and to automate visual content discovery in social media.
+DeepLogo.ai uses computer vision technologies and advanced AI algorithms to detect logos in images and videos and to automate visual content discovery in social media.
 
 <center><img src="https://github.com/JulianLopezB/deepstagram.ai/raw/master/static/375f3a12-b4cb-4656-a360-1e4ce982a9ba.jpeg" width="50%"></center>
 
