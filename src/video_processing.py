@@ -10,7 +10,7 @@ import cv2
 import json
 from tqdm import tqdm_notebook as tqdm
 from pathlib import Path
-import os
+import os, shutil
 import math
 import datetime
 import urllib.request as req
@@ -22,6 +22,20 @@ from apiclient.http import MediaFileUpload
 #from google.cloud import videointelligence_v1p3beta1 as videointelligence
 from google.cloud import videointelligence
 from src.credentials import *
+from src.utils import read_config
+
+
+config = read_config(pathConfig)
+pathIn = config['PATHS']['pathIn']
+pathIn_Video = config['PATHS']['pathIn_Video']
+pathIn_Frames = config['PATHS']['pathIn_Frames']
+pathIn_Frames_Resized = config['PATHS']['pathIn_Frames_Resized']
+pathIn_Frames_zip = config['PATHS']['pathIn_Frames_zip']
+pathOut = config['PATHS']['pathOut']
+path_results = config['PATHS']['path_results']
+path_annotations = config['PATHS']['path_annotations']
+path_logos_video = config['PATHS']['path_logos_video']
+path_model_data = config['PATHS']['path_model_data']
 
 
 def create_paths(pathOut, pathIn_Frames, pathIn_Frames_Resized):
@@ -287,4 +301,21 @@ def get_video_id(video_url):
     url_data = urlparse.urlparse(video_url)
     query = urlparse.parse_qs(url_data.query)
     return query["v"][0]
+
+def count_frames(pathIn_Video):
+    cap = cv2.VideoCapture(str(pathIn_Video))
+    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)/2)
+    print(f"Video file is {length} frames long")
+    return length
+
+def delete_path_content(folder):
+    for filename in os.listdir(str(folder)):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
 

@@ -2,7 +2,25 @@ from google.cloud import storage
 from pathlib import Path
 import datetime
 import os
+import io
+from tqdm import tqdm
+from google.resumable_media.requests import ResumableUpload
+from google.auth.transport.requests import AuthorizedSession
 from src.credentials import *
+from src.utils import read_config
+
+
+config = read_config(pathConfig)
+pathIn = config['PATHS']['pathIn']
+pathIn_Video = config['PATHS']['pathIn_Video']
+pathIn_Frames = config['PATHS']['pathIn_Frames']
+pathIn_Frames_Resized = config['PATHS']['pathIn_Frames_Resized']
+pathIn_Frames_zip = config['PATHS']['pathIn_Frames_zip']
+pathOut = config['PATHS']['pathOut']
+path_results = config['PATHS']['path_results']
+path_annotations = config['PATHS']['path_annotations']
+path_logos_video = config['PATHS']['path_logos_video']
+path_model_data = config['PATHS']['path_model_data']
 
 
 def implicit():
@@ -45,7 +63,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(source_file_name, timeout=1000)
+    blob.upload_from_filename(source_file_name, content_type='media', timeout=1000)
 
     print(
         "File {} uploaded to {}.".format(
@@ -80,6 +98,38 @@ def retry_on_connectionerror(f, max_retries=5):
     except ConnectionError:
       retries += 1
   raise Exception("Maximum retries exceeded")
+
+
+def upload_file_to_gstore(bucket_name, path_file, video_name, fileType, chunk_size):
+    
+    authed_session = AuthorizedSession(credentials)
+    data = open(path_file, 'rb').read()
+
+    url_template = (
+             f'https://www.googleapis.com/upload/storage/v1/b/{bucket_name}/o?'
+             u'uploadType=resumable')
+
+    upload_url = url_template.format(bucket=bucket_name)
+
+    upload = ResumableUpload(upload_url, chunk_size)
+    stream = io.BytesIO(data)
+
+    metadata = {u'name': video_name}
+    response = upload.initiate(authed_session, stream, metadata, fileType)
+
+    upload_id = response.headers[u'X-GUploader-UploadID']
+    
+    print(f'File size: {upload.total_bytes/1024} Mb')
+    pbar = tqdm(total=upload.total_bytes)
+    finished = upload.finished
+    while not finished:
+        response = upload.transmit_next_chunk(authed_session)
+        pbar.update(upload.bytes_uploaded)
+        finished = upload.finished
+        # print(finished)
+    pbar.close()
+    print('File uploaded')
+
 
 # def upload_blob(bucket_name, source_file_name, destination_blob_name):
 #     """Uploads a file to the bucket."""
