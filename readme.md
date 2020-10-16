@@ -12,13 +12,13 @@ DeepLogo.ai uses computer vision technologies and advanced AI algorithms to dete
 
 The initial project consists of 3 steps:
 
-- A) Build a pipeline to retrieve annotated data from a YouTube's video using Google's VideoIntelligence API
-- B) Use annotated data to train a deep neural network
-- C) Deploy and serve the trained model as a RESTful API (Model as a Service)
+- A) Build aN ETL pipeline to fetch annotated data from a YouTube's video using Google's VideoIntelligence API
+- B) Use this data to train a deep neural network
+- C) Deploy and serve the model as a RESTful API (Model as a Service)
 
-# A) Pipeline to get annotated data from a YouTube's video using Video Intelligence API
+## A) ETL Pipeline to get annotated data from a YouTube's video using Video Intelligence API
 
-## What it does?
+### What it does?
 - 1) Download video from YouTube's url
 - 2) Upload video to GCloud Storage
 - 3) Get video annotations of YouTube's video from VideoIntellige API
@@ -26,21 +26,20 @@ The initial project consists of 3 steps:
 - 5) Process annotations and frames and prepares data for model training
 - 6) Upload processed frames and annotations for model training to GCloud Storage
 
-## Usage
+### Usage
 
 `$ pip install requirements`  
 `$ python pipeline.py -u $VIDEO_URL -c $VIDEO_CATEGORY`
 
-### Example
+Example
 `$ python pipeline.py -u https://www.youtube.com/watch?v=TB5yhZdF8SI -c 'F1'`
 
 
-
-## Output
+### Output
 - Video file (.mp4 or .mkv)
 - Raw results from VideoIntelligence API (.json)
 - Annotations with raw results (.csv))
 
-### For model training:
+For model training:
 - Procesed Frames (.zip with .jpgs)
 - Processed annotations (.csv)
