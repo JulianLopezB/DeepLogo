@@ -7,15 +7,19 @@ from src.paths import *
 
 #ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-video_url = "https://www.youtube.com/watch?v=EmZtTd1YRmA"
+video_category = 'F1'
+
+video_url = 'https://www.youtube.com/watch?v=TB5yhZdF8SI'
+#video_url = "https://www.youtube.com/watch?v=EmZtTd1YRmA"
 #video_url = "https://www.youtube.com/watch?v=2femix89pTE&t=4s"
 
 # PARAMS
-chunk_size = 1024 * 1024  # 1MB
+#chunk_size = 1024 * 1024  # 1MB
+chunk_size = 512 * 512
 
 video_title = get_video_id(video_url)
 
-config = write_config(video_title)
+config = write_config(video_title, video_category)
 
 pathIn = config['PATHS']['pathIn']
 pathIn_Video = config['PATHS']['pathIn_Video']

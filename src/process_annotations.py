@@ -8,7 +8,6 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt 
 import os
 import os
-import zipfile
 from sklearn import preprocessing
 from src.paths import *
 from src.utils import *
