@@ -8,19 +8,26 @@ def write_config(video_title, video_category):
 
     try:
         config = configparser.ConfigParser()
+
+        # Paths
         config['PATHS'] = {
+
+                        # Inputs paths
                         'pathIn': f'data/video-files/{video_category}/{video_title}/input/',
-                        'pathIn_Video': f'data/video-files/{video_category}/{video_title}/input/' + str(video_title + '.mp4'),
+                        'pathIn_Video': f'data/video-files/{video_category}/{video_title}/input/{video_title}.mp4',
                         'pathIn_Frames': f'data/video-files/{video_category}/{video_title}/input/' + 'frames/',
-                        'pathIn_Frames_Resized' : f'data/video-files/{video_category}/{video_title}/input/' + 'frames_resized/',
-                        'pathIn_Frames_zip': f'data/video-files/{video_category}/{video_title}/input/' + 'frames.zip',
+                        'pathIn_Frames_Resized' : f'data/video-files/{video_category}/{video_title}/input/frames_resized/',
+                        'pathIn_Frames_zip': f'data/video-files/{video_category}/{video_title}/input/frames.zip',
+
+                        # Output paths
                         'pathOut': f'data/video-files/{video_category}/{video_title}/output/',
-                        'path_results': f'data/video-files/{video_category}/{video_title}/output/' + 'result.json',
-                        'path_annotations': f'data/video-files/{video_category}/{video_title}/output/' + 'annotations.csv',
-                        'path_logos_video': f'data/video-files/{video_category}/{video_title}/output/' + f'{video_title} - Logos.mp4',
-                        'path_model_data': f'data/video-files/{video_category}/{video_title}/output/' + 'data.csv'
+                        'path_results': f'data/video-files/{video_category}/{video_title}/output/result.json',
+                        'path_annotations': f'data/video-files/{video_category}/{video_title}/output/annotations.csv',
+                        'path_logos_video': f'data/video-files/{video_category}/{video_title}/output/{video_title}_logos.mp4',
+                        'path_model_data': f'data/video-files/{video_category}/{video_title}/output/data.csv'
                         }
 
+        # Gcloud Storage Bucket
         config['BUCKET'] = { 'bucket_name': 'videos-detection',
                             'video_category' : video_category
                             }
