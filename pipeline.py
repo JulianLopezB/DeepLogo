@@ -1,3 +1,4 @@
+import argparse
 from src.video_processing import *
 from src.process_annotations import *
 from src.fetch_data import *
@@ -5,17 +6,26 @@ from src.paths import *
 
 # ARGS 
 
-#ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+parser = argparse.ArgumentParser()
+parser.add_argument("-u", "--url", type=str,
+                    help="Youtube URL")
+parser.add_argument("-c", "--category", type=str,
+                    help="Video category (example: F1, Tennis, Futbol)")
 
-video_category = 'F1'
+args = parser.parse_args()
 
-video_url = 'https://www.youtube.com/watch?v=TB5yhZdF8SI'
+video_url = args.url
+video_category = args.category
+
+#video_url = 'https://www.youtube.com/watch?v=TB5yhZdF8SI'
 #video_url = "https://www.youtube.com/watch?v=EmZtTd1YRmA"
 #video_url = "https://www.youtube.com/watch?v=2femix89pTE&t=4s"
 
 # PARAMS
+#ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 #chunk_size = 1024 * 1024  # 1MB
-chunk_size = 512 * 512
+chunk_size = 512 * 512 # 0.5MB
 
 video_title = get_video_id(video_url)
 
