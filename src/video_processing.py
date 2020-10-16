@@ -38,17 +38,7 @@ path_logos_video = config['PATHS']['path_logos_video']
 path_model_data = config['PATHS']['path_model_data']
 
 
-def create_paths(pathOut, pathIn_Frames, pathIn_Frames_Resized):
 
-    if not os.path.exists(pathOut):
-        os.makedirs(pathOut)
-
-    if not os.path.exists(pathIn_Frames):
-        os.makedirs(pathIn_Frames)
-        
-    if not os.path.exists(pathIn_Frames_Resized):
-        os.makedirs(pathIn_Frames_Resized)
-    
 def load_videos(video_file):
     
     capture = cv2.VideoCapture(video_file)
@@ -133,9 +123,9 @@ def video_to_frames(vid_input, pathOut):
 
 def write_frame(count, frame, pathOut):
 
-    cv2.imwrite(str(pathOut / f'frame{count}.jpg'), frame)
+    cv2.imwrite(pathOut + f'frame{count}.jpg', frame)
 
-    if not cv2.imwrite(str(pathOut / f'frame{count}.jpg'), frame):
+    if not cv2.imwrite(pathOut + f'frame{count}.jpg', frame):
         raise Exception("Could not write image")
         
 def download_video(video_url, pathIn_Video):

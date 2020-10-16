@@ -119,7 +119,7 @@ def upload_file_to_gstore(bucket_name, path_file, video_name, fileType, chunk_si
 
     upload_id = response.headers[u'X-GUploader-UploadID']
     
-    print(f'File size: {upload.total_bytes/1024} Mb')
+    print(f'File size: {upload.total_bytes} bytes')
     pbar = tqdm(total=upload.total_bytes)
     finished = upload.finished
     while not finished:
