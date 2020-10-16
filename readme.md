@@ -13,4 +13,4 @@ DeepLogo.ai uses computer vision technologies and advanced AI algorithms to dete
 ## Usage
 
 `$ pip install requirements`  
-`$ python pipeline.py`
+`$ python pipeline.py -u https://www.youtube.com/watch?v=TB5yhZdF8SI -c 'F1'`
