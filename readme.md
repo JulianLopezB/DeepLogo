@@ -1,6 +1,6 @@
 ## Welcome to DeepLogo.ai ©
 
-An early stage project to track brand logos in images and videos across the web. Measure brand visibility in social networks context and search the web for marketing highlights and brand safety. Companies spend millinos of dollars to track brand mentions but they ignore one powerful part of the message: the image. 
+An early stage project to track brand logos in images and videos across the web. Measure brand visibility in social networks context and search the web for marketing highlights and brand safety. Companies spend millions of dollars to track brand mentions but they ignore one powerful part of the message: the image. 
 
 DeepLogo.ai uses computer vision technologies and advanced AI algorithms to detect logos in images and videos and to automate visual content discovery in social media.
  
@@ -12,7 +12,7 @@ DeepLogo.ai uses computer vision technologies and advanced AI algorithms to dete
 
 The initial project consists of 3 steps:
 
-- A) Build aN ETL pipeline to fetch annotated data from a YouTube's video using Google's VideoIntelligence API
+- A) Build an ETL pipeline to fetch annotated data from a YouTube's video using Google's VideoIntelligence API
 - B) Use this data to train a deep neural network
 - C) Deploy and serve the model as a RESTful API (Model as a Service)
 
@@ -32,13 +32,13 @@ The initial project consists of 3 steps:
 `$ python pipeline.py -u $VIDEO_URL -c $VIDEO_CATEGORY`
 
 Example
-`$ python pipeline.py -u https://www.youtube.com/watch?v=TB5yhZdF8SI -c 'F1'`
+`$ python pipeline.py -u https://www.youtube.com/watch?v=TB5yhZdF8SI -c F1`
 
 
 ### Output
 - Video file (.mp4 or .mkv)
 - Raw results from VideoIntelligence API (.json)
-- Annotations with raw results (.csv))
+- Annotations with raw results (.csv)
 
 For model training:
 - Procesed Frames (.zip with .jpgs)

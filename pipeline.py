@@ -1,4 +1,6 @@
 import argparse
+import pickle
+
 from src.video_processing import *
 from src.process_annotations import *
 from src.fetch_data import *
@@ -28,6 +30,7 @@ video_category = args.category
 chunk_size = 512 * 512 # 0.5MB
 
 video_title = get_video_id(video_url)
+print(f'VIDEO TITLE: {video_title}')
 
 config = write_config(video_title, video_category)
 
@@ -114,14 +117,19 @@ if __name__ == "__main__":
 
      # 5) GET FRAMES FROM VIDEO 
     lenght = count_frames(pathIn_Video)
-    NUM_FRAMES = len([name for name in os.listdir(str(pathIn_Frames))])
-    if abs(lenght - NUM_FRAMES) < 10:
+
+    #NUM_FRAMES = len([name for name in os.listdir(str(pathIn_Frames))])
+    list_frames = [int(name[5:-4]) for name in os.listdir(str(pathIn_Frames))]
+    NUM_FRAMES = len(list_frames)
+
+    if lenght <= NUM_FRAMES: 
         print('Frames already stored in disk')
     else:
-        delete_path_content(pathIn_Frames)
+        print(f'{NUM_FRAMES} already generated but {lenght} frames detected in Video')
+        #delete_path_content(pathIn_Frames)
         # Get frames from video and save them
         print('Saving video frames to disk')
-        video_to_frames(pathIn_Video, pathIn_Frames)
+        video_to_frames(pathIn_Video, pathIn_Frames, list_frames)
         #video_url_to_frames(video_url, pathIn_Frames)
 
     # 6) CREATE CSV WITH RAW ANNOTATINOS 
@@ -154,11 +162,20 @@ if __name__ == "__main__":
         print('Creating data (.csv) for model training...')
         data = create_data(annotations_df, NUM_FRAMES)
         data = populate_data(data)
+        data.reset_index(inplace=True, drop=True)
         print('Saving data (.csv) for model training...')
+        #outfile = open(path_model_data, "wb")
+        #pickle.dump(data, outfile)
+        #outfile.close()
         data.to_csv(path_model_data)
+        #data.to_pickle(path_model_data)
+        #data.reset_index(drop=True).to_json(path_model_data, orient='records', default_handler=str)
+        #data.to_json(path_model_data, default_handler=str)
+        del data
     else:
         print('Data for model training already generated and stored in disk')
         data = pd.read_csv(str(path_model_data))
+        #data = pd.read_json(str(path_model_data))
 
     blob_model_data = f'videos_files/{video_category}/{video_title}/data.csv'
     if not is_stored(blob_model_data, bucket_name):
