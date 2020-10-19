@@ -189,16 +189,18 @@ if __name__ == "__main__":
     if not os.path.isfile(str(pathIn_Frames_zip)):
         print('Compressing frames (.zip) for model training...')
         # Comprimo frames_resized folder into frames.zip
-        zip_dir(pathIn_Frames_Resized, pathIn_Frames_zip)
         print('Saving frames compressed data (.zip) for model training...')
+        zip_dir(pathIn_Frames_Resized, pathIn_Frames_zip)
+        print('Frames compressed data (.zip) for model training savec')
     else:
         print('Compressed frames (.zip) for model training already generated and stored in disk')
 
 
-    blob_path_frames = f'videos_files/{video_category}/{video_title}/frames.zip'
-    if not is_stored(blob_path_frames, bucket_name):
-        fileType = 'application/x-zip-compressed'
-        upload_file_to_gstore(bucket_name, str(pathIn_Frames_zip), blob_path_frames, fileType, chunk_size)
-        print('Compressed frames (.zip) uploaded to GCLoud')
-    else:
-        print('Compressed frames (.zip) already stored in GCloud') 
+    # blob_path_frames = f'videos_files/{video_category}/{video_title}/frames.zip'
+    # if not is_stored(blob_path_frames, bucket_name):
+    #     fileType = 'application/x-zip-compressed'
+    #     print('uploading compressed frames (.zip) to GCLoud')
+    #     upload_file_to_gstore(bucket_name, str(pathIn_Frames_zip), blob_path_frames, fileType, chunk_size)
+    #     print('Compressed frames (.zip) uploaded to GCLoud')
+    # else:
+    #     print('Compressed frames (.zip) already stored in GCloud') 

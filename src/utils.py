@@ -53,12 +53,18 @@ def read_config(pathConfig):
 
 
 def zip_dir(path, zip_name):
-    #zipf = zipfile.ZipFile(str(zip_name), 'w', zipfile.ZIP_DEFLATED)
-    zipf = zipfile.ZipFile(str(zip_name), 'w')
-    for root, dirs, files in os.walk(str(str(path))):
+    zipf = zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED)
+    abs_src = os.path.abspath(path)
+    for root, dirs, files in os.walk(str(path)):
         for f in files:
-            zipf.write(os.path.join(root, f))
+            absname = os.path.abspath(os.path.join(root, f))
+            arcname = absname[len(abs_src) + 1:]
+            print(f'zipping {os.path.join(root, f)} as {arcname}')
+            zipf.write(absname, arcname)
+            #zipf.write(os.path.join(root, f))
     zipf.close()
+
+
 
 def create_paths(pathOut, pathIn_Frames, pathIn_Frames_Resized):
 
@@ -94,7 +100,7 @@ def concatenate_anno(path, video_category):
                     #list_data.append(pickle.load(infile))
                     #df = pd.concat([df, pd.DataFrame(pickle.load(infile))])
 
-    df = pd.concat([pd.read_csv(x) for x in list_data], axis=1)
+    df = pd.concat([pd.read_csv(x) for x in list_data], axis=0)
 
     if len(df) >  0:
         if 'class' in df.columns:
