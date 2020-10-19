@@ -1,5 +1,5 @@
 from pathlib import Path
-from tqdm import tqdm_notebook as tqdm
+from tqdm import tqdm as tqdm
 import pandas as pd
 import numpy as np
 import random
@@ -8,7 +8,6 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt 
 import os
 import os
-from sklearn import preprocessing
 from src.paths import *
 from src.utils import *
 
@@ -25,12 +24,16 @@ path_logos_video = config['PATHS']['path_logos_video']
 path_model_data = config['PATHS']['path_model_data']
 
 
+def read_img(path):
+    return np.array(cv2.imread(str(path)))
+
+
 def create_path(frame): 
     return Path(pathIn_Frames) / str(f'frame{frame}.jpg')
 
 def create_data(df, NUM_FRAMES):
 
-    le = preprocessing.LabelEncoder()
+    #le = preprocessing.LabelEncoder()
     
     data = pd.DataFrame({'index': range(NUM_FRAMES)})
     data = data.join(df.set_index('frame'))
@@ -40,12 +43,15 @@ def create_data(df, NUM_FRAMES):
     data['filename'] = data['index'].apply(create_path)
     data['widht'] = data['x2'] - data['x1']
     data['height'] = data['y3'] - data['y1']
-    data['class'] = le.fit_transform(data['logo'])
+    #data['class'] = le.fit_transform(data['logo'])
+    data['class'] = data['logo']
     data['xmin'] = data['x1']
     data['ymin'] = data['y1']
     data['xmax'] = data['x2']
     data['ymax'] = data['y3']
     
+    del data['logo']
+
     data = data[['filename', 'widht', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']]
 
     return data
@@ -154,15 +160,20 @@ def populate_data(df):
     df_new = df.copy()
     #Populating Training DF with new paths and bounding boxes
     new_paths = []
+    #new_imgs = []
     new_bbs = []
     for index, row in tqdm(df_new.iterrows(), total=df_new.shape[0]):
         new_path,new_bb = resize_image_bb(row['filename'], Path(pathIn_Frames_Resized), create_bb_array(row.values),300)
+        #new_img, new_bb = transformsXY(row['filename'], create_bb_array(row.values), transforms=True)
         new_paths.append(new_path)
+        #new_imgs.append(new_img)
         new_bbs.append(new_bb)
+
     df_new['new_path'] = new_paths
+    df_new['img_data'] = df_new['new_path'].apply(read_img)
+    #df_new['img_data'] = new_imgs
     df_new['new_bb'] = new_bbs
     
     return df_new
-
 
 

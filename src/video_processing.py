@@ -5,10 +5,9 @@ import pafy
 import youtube_dl
 import io
 from PIL import Image
-from tqdm import tqdm_notebook, tqdm
+from tqdm import tqdm
 import cv2
 import json
-from tqdm import tqdm_notebook as tqdm
 from pathlib import Path
 import os, shutil
 import math
@@ -84,12 +83,12 @@ def get_video_anno(input_video, local=False):
   
     return response
 
-def video_to_frames(vid_input, pathOut):
+def video_to_frames(vid_input, pathOut, list_frames):
 
     #start the video
     
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,  480))
+    #out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,  480))
 
     cap = cv2.VideoCapture(str(vid_input))
 
@@ -105,7 +104,8 @@ def video_to_frames(vid_input, pathOut):
 
         if ret==True:
 
-            write_frame(count, frame, pathOut)
+            if count not in list_frames:
+                write_frame(count, frame, pathOut)
 
             ret, frame = cap.read()
             count += 1
