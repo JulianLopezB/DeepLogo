@@ -28,7 +28,7 @@ The initial project consists of 3 steps:
 
 ### Usage
 
-`$ pip install requirements`  
+`$ pip install -r requirements.txt`  
 `$ python pipeline.py -u $VIDEO_URL -c $VIDEO_CATEGORY`
 
 Example
