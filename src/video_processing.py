@@ -149,7 +149,7 @@ def download_video_bis(video_url, pathIn_Video):
     yt.download(str(pathIn_Video))
 
         
-def anno_to_pandas(pathIn_Video, result):
+def anno_to_df(pathIn_Video, result):
 
     vcap = cv2.VideoCapture(str(pathIn_Video))
 

@@ -138,7 +138,7 @@ if __name__ == "__main__":
         # Creates dataframe with annotations
         print('Creating dataframe with raw annotations...')
         result = results = load_result(path_results)
-        annotations_df = anno_to_pandas(pathIn_Video, result)
+        annotations_df = anno_to_df(pathIn_Video, result)
         annotations_df = annotations_df.sort_values(by='frame')
         # Save annotations
         print('Saving annotations as csv file...')

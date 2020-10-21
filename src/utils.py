@@ -81,17 +81,17 @@ def create_paths(pathOut, pathIn_Frames, pathIn_Frames_Resized):
     print(f'Path "{pathIn_Frames}" created')
     print(f'Path "{pathIn_Frames_Resized}" created')
 
-def concatenate_anno(path, video_category):
+def concatenate_anno(path):
 
-    le = preprocessing.LabelEncoder()
     list_data = []
 
-    #df = pd.DataFrame()
+    df = pd.DataFrame()
     for root,dirs,_ in os.walk(path):
         for d in dirs:
             path_sub = os.path.join(root,d) # this is the current subfolder
             for filename in glob.glob(os.path.join(path_sub, '*.csv')):
-                if os.path.split(filename)[1] == 'data.csv' and video_category in filename:
+                print(filename)
+                if os.path.split(filename)[1] == 'datos.csv':
                     print(f'Concatenating {filename}')
                     #df = pd.concat([df, pd.read_csv(filename, index_col=[0])])
                     list_data.append(filename)
@@ -100,18 +100,21 @@ def concatenate_anno(path, video_category):
                     #list_data.append(pickle.load(infile))
                     #df = pd.concat([df, pd.DataFrame(pickle.load(infile))])
 
-    df = pd.concat([pd.read_csv(x) for x in list_data], axis=0)
+    df = pd.concat([pd.read_csv(x).reset_index(drop=True) for x in list_data], axis=0)
 
     if len(df) >  0:
-        if 'class' in df.columns:
-            df['class'] = le.fit_transform(df['class'])
-        else:
-            raise ValueError("Column 'class' not found")
-        df['category'] = video_category
         print(f'Data concatenated. {len(df)} annotations were appended')
+        len_classes = df.groupby('class')['filename'].count().to_dict()
+        df = df[df['class'].map(lambda x: len_classes[x]>20)]
+        df = df[df['class']!='None']
+
+        le = preprocessing.LabelEncoder()
+        df['class'] = le.fit_transform(df['class'])
+        
+
     else:
         raise ValueError("No annotations found")
-    
+
     return df
 
     
