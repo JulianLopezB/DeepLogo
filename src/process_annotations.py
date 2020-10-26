@@ -43,13 +43,13 @@ def create_data(df, NUM_FRAMES):
     data['filename'] = data['index'].apply(create_path)
     data['widht'] = data['x2'] - data['x1']
     data['height'] = data['y3'] - data['y1']
-    #data['class'] = le.fit_transform(data['logo'])
-    data['class'] = data['logo']
     data['xmin'] = data['x1']
     data['ymin'] = data['y1']
     data['xmax'] = data['x2']
     data['ymax'] = data['y3']
     
+    # Rename column (mas pythonic)
+    data['class'] = data['logo']
     del data['logo']
 
     data = data[['filename', 'widht', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']]
@@ -163,14 +163,14 @@ def populate_data(df):
     #new_imgs = []
     new_bbs = []
     for index, row in tqdm(df_new.iterrows(), total=df_new.shape[0]):
-        new_path,new_bb = resize_image_bb(row['filename'], Path(pathIn_Frames_Resized), create_bb_array(row.values),300)
+        new_path, new_bb = resize_image_bb(row['filename'], Path(pathIn_Frames_Resized), create_bb_array(row.values),300)
         #new_img, new_bb = transformsXY(row['filename'], create_bb_array(row.values), transforms=True)
         new_paths.append(new_path)
         #new_imgs.append(new_img)
         new_bbs.append(new_bb)
 
     df_new['new_path'] = new_paths
-    df_new['img_data'] = df_new['new_path'].apply(read_img)
+    #df_new['img_data'] = df_new['new_path'].apply(read_img)
     #df_new['img_data'] = new_imgs
     df_new['new_bb'] = new_bbs
     

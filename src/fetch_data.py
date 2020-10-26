@@ -52,28 +52,28 @@ def create_bucket_class_location(bucket_name):
     )
     return new_bucket
 
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
+def upload_blob(bucket_name, source_file_name, destination_blob_name, fileType):
     """Uploads a file to the bucket."""
     # bucket_name = "your-bucket-name"
     # source_file_name = "local/path/to/file"
     # destination_blob_name = "storage-object-name"
 
     #storage_client = storage.Client.from_service_account_json(str(path_json))
-    storage_client = storage.Client()
+    storage_client = storage.Client(credentials=credentials)
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(source_file_name, content_type='media', timeout=1000)
+    blob.upload_from_filename(source_file_name, content_type=fileType, timeout=1000)
 
-    print(
-        "File {} uploaded to {}.".format(
-            source_file_name, destination_blob_name
-        )
-    )
+    # print(
+    #     "File {} uploaded to {}.".format(
+    #         source_file_name, destination_blob_name
+    #     )
+    # )
     
 
 def is_stored(blob_path, bucket_name):
-    storage_client = storage.Client()
+    storage_client = storage.Client(credentials=credentials)
     bucket = storage_client.bucket(bucket_name)
     stats = storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)
     return stats
@@ -100,7 +100,7 @@ def retry_on_connectionerror(f, max_retries=5):
   raise Exception("Maximum retries exceeded")
 
 
-def upload_file_to_gstore(bucket_name, path_file, video_name, fileType, chunk_size):
+def upload_file_to_gstore(bucket_name, path_file, file_name, fileType, chunk_size=1024 * 1024):
     
     authed_session = AuthorizedSession(credentials)
     data = open(path_file, 'rb').read()
@@ -114,7 +114,7 @@ def upload_file_to_gstore(bucket_name, path_file, video_name, fileType, chunk_si
     upload = ResumableUpload(upload_url, chunk_size)
     stream = io.BytesIO(data)
 
-    metadata = {u'name': video_name}
+    metadata = {u'name': file_name}
     response = upload.initiate(authed_session, stream, metadata, fileType)
 
     upload_id = response.headers[u'X-GUploader-UploadID']

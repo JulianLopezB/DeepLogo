@@ -149,7 +149,7 @@ def download_video_bis(video_url, pathIn_Video):
     yt.download(str(pathIn_Video))
 
         
-def anno_to_pandas(pathIn_Video, result):
+def anno_to_df(pathIn_Video, result):
 
     vcap = cv2.VideoCapture(str(pathIn_Video))
 
@@ -309,3 +309,37 @@ def delete_path_content(folder):
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
+
+def get_n_frame(x):
+    return int(float(x[5:-4]))
+
+
+def render_video(pathOut_Frames, videoOut_file):
+    list_frames = [img for img in os.listdir(pathOut_Frames) if img.endswith('.jpg')]
+    list_frames = sorted(list_frames, key = get_n_frame)
+    print(list_frames[0][5:-4])
+
+    height, width, layers=cv2.imread(pathOut_Frames+list_frames[1]).shape
+    print(f'Building a video of size {width}x{height}')
+
+    codec = cv2.VideoWriter_fourcc(*'DIVX')
+    #codec = 0
+    out = cv2.VideoWriter(videoOut_file, codec, 12.5, (width, height))
+
+    for img in tqdm(list_frames):
+        out.write(cv2.imread(pathOut_Frames+img))
+        
+    out.release()
+    print("Video done")
+    cv2.destroyAllWindows()
+
+# def makeVideo(imgPath, videodir, videoname, width, height):
+#     video = cv2.VideoWriter(videodir+videoname,-1,1,(width, height))
+#     for img in os.listdir(imgPath):
+#         if not img.endswith('.jpg'):
+#             continue
+#         shot = cv2.imread(imgPath+img)
+#         video.write(shot)
+#     video.release()
+#     cv2.destroyAllWindows()
+#     print("one video done")
