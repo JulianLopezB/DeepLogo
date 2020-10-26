@@ -43,3 +43,7 @@ Example
 For model training:
 - Procesed Frames (.zip with .jpgs)
 - Processed annotations (.csv)
+
+
+## B) Training a Model
+See https://medium.com/swlh/how-to-leverage-gcp-free-tier-to-train-your-custom-object-detection-with-yolov5-c0dde7a3c189
