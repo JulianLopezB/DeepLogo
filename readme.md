@@ -28,7 +28,7 @@ The initial project consists of 3 steps:
 
 ### Usage
 
-`$ pip install requirements`  
+`$ pip install -r requirements.txt`  
 `$ python pipeline.py -u $VIDEO_URL -c $VIDEO_CATEGORY`
 
 Example
@@ -46,4 +46,5 @@ For model training:
 
 
 ## B) Training a Model
+
 See https://medium.com/swlh/how-to-leverage-gcp-free-tier-to-train-your-custom-object-detection-with-yolov5-c0dde7a3c189
